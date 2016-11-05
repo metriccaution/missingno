@@ -23,7 +23,12 @@ public class Main {
 			}
 		});
 
-		get("/:dir/*", (req, res) -> {
+		get("/content/:dir", (req, res) -> {
+			res.redirect("/content/" + req.params("dir") + "/");
+			return null;
+		});
+
+		get("/content/:dir/*", (req, res) -> {
 			final String dir = req.params("dir");
 
 			if (!contexts.containsKey(dir)) {
