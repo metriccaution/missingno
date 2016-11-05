@@ -11,7 +11,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Main {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
 	public static void main(final String[] args) {
 		final Map<String, String> contexts = new HashMap<>();
@@ -23,6 +28,10 @@ public class Main {
 			}
 		});
 
+		before("*", (req, res) -> {
+			LOGGER.info(req.uri());
+		});
+
 		get("/content/:dir", (req, res) -> {
 			res.redirect("/content/" + req.params("dir") + "/");
 			return null;
@@ -32,8 +41,7 @@ public class Main {
 			final String dir = req.params("dir");
 
 			if (!contexts.containsKey(dir)) {
-				res.status(404);
-				return "";
+				throw new NoDirectoryException();
 			}
 
 			final String path = req.splat().length == 0 ? "" : req.splat()[0];
@@ -47,9 +55,18 @@ public class Main {
 
 				return result.get();
 			} else {
-				res.status(404);
-				return "";
+				throw new NoFileException();
 			}
+		});
+
+		exception(NoDirectoryException.class, (ex, req, res) -> {
+			res.status(404);
+			res.body("No directory");
+		});
+
+		exception(NoFileException.class, (ex, req, res) -> {
+			res.status(404);
+			res.body("No file");
 		});
 	}
 
@@ -120,6 +137,14 @@ public class Main {
 		}
 
 		return ret;
+	}
+
+	public static class NoDirectoryException extends Exception {
+		private static final long serialVersionUID = 785202694572137886L;
+	}
+
+	public static class NoFileException extends Exception {
+		private static final long serialVersionUID = 785202694572137886L;
 	}
 
 }
