@@ -17,7 +17,7 @@
 		<resources.version>2.7</resources.version>
 		<shade.version>2.4.3</shade.version>
 		<!-- Dependency versions -->
-		<spark.version>2.5</spark.version>
+		<spark.version>2.3</spark.version>
 		<slf4j.simple.version>1.7.21</slf4j.simple.version>
 		<guava.version>19.0</guava.version>
 	</properties>
@@ -29,10 +29,17 @@
 			<version>${spark.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.sparkjava</groupId>
+			<artifactId>spark-template-jade</artifactId>
+			<version>${spark.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>${slf4j.simple.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>

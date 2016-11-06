@@ -13,6 +13,9 @@ import com.github.metriccaution.missingno.content.ContentRouter;
 import com.github.metriccaution.missingno.contexts.Contexts;
 import com.github.metriccaution.missingno.listing.ContentListingRouter;
 
+import spark.TemplateEngine;
+import spark.template.jade.JadeTemplateEngine;
+
 public class Main {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
@@ -33,7 +36,9 @@ public class Main {
 
 		final Contexts ctx = new Contexts(contexts);
 
-		new ContentRouter("/content", ctx);
+		final TemplateEngine engine = new JadeTemplateEngine();
+
+		new ContentRouter("/content", ctx, engine);
 		new ContentListingRouter("/listing");
 	}
 

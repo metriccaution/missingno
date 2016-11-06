@@ -12,10 +12,14 @@ import java.util.Optional;
 
 import com.github.metriccaution.missingno.Router;
 import com.github.metriccaution.missingno.contexts.Contexts;
+import com.google.common.collect.Maps;
+
+import spark.ModelAndView;
+import spark.TemplateEngine;
 
 public class ContentRouter extends Router {
 
-	public ContentRouter(final String base, final Contexts contexts) {
+	public ContentRouter(final String base, final Contexts contexts, final TemplateEngine engine) {
 		super(base);
 
 		get("/:dir", (req, res) -> {
@@ -27,7 +31,7 @@ public class ContentRouter extends Router {
 			final String dir = req.params("dir");
 
 			final String path = req.splat().length == 0 ? "" : req.splat()[0];
-			final Path location = createPath(contexts.get(dir), path);
+			final Path location = createPath(getPath(contexts, dir), path);
 			final Optional<byte[]> result = fileContents(location);
 
 			if (result.isPresent()) {
@@ -41,15 +45,26 @@ public class ContentRouter extends Router {
 			}
 		});
 
+
 		exception(NoDirectoryException.class, (ex, req, res) -> {
 			res.status(404);
-			res.body("No directory");
+			final HashMap<String, String> data = Maps.newHashMap();
+			data.put("context", ((NoDirectoryException)ex).getContext());
+			res.body(engine.render(new ModelAndView(data, "no-context")));
 		});
 
 		exception(NoFileException.class, (ex, req, res) -> {
 			res.status(404);
 			res.body("No file");
 		});
+	}
+
+	public static Path getPath(final Contexts ctx, final String name) {
+		try {
+			return ctx.get(name);
+		} catch (final IllegalArgumentException e) {
+			throw new NoDirectoryException(name);
+		}
 	}
 
 	public static Path createPath(final Path root, final String path) {
