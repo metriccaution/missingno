@@ -1,22 +1,22 @@
-package com.github.metriccaution.missingno;
+package com.github.metriccaution.missingno.content;
 
 import static spark.Spark.exception;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
+import com.github.metriccaution.missingno.Router;
+import com.github.metriccaution.missingno.contexts.Contexts;
+
 public class ContentRouter extends Router {
 
-	public ContentRouter(final String base, final Map<String, String> contexts) {
+	public ContentRouter(final String base, final Contexts contexts) {
 		super(base);
-
-		final Map<String, String> ctx = new HashMap<>(contexts);
 
 		get("/:dir", (req, res) -> {
 			res.redirect("/content/" + req.params("dir") + "/");
@@ -26,12 +26,8 @@ public class ContentRouter extends Router {
 		get("/:dir/*", (req, res) -> {
 			final String dir = req.params("dir");
 
-			if (!ctx.containsKey(dir)) {
-				throw new NoDirectoryException();
-			}
-
 			final String path = req.splat().length == 0 ? "" : req.splat()[0];
-			final Path location = createPath(ctx.get(dir), path);
+			final Path location = createPath(contexts.get(dir), path);
 			final Optional<byte[]> result = fileContents(location);
 
 			if (result.isPresent()) {
@@ -56,8 +52,8 @@ public class ContentRouter extends Router {
 		});
 	}
 
-	public static Path createPath(final String root, final String path) {
-		final Path constructedPath = Paths.get(root.replaceAll("^~", System.getProperty("user.home")), path);
+	public static Path createPath(final Path root, final String path) {
+		final Path constructedPath = root.resolve(path);
 
 		if (Files.isDirectory(constructedPath)) {
 			return constructedPath.resolve("index.html");
@@ -123,14 +119,6 @@ public class ContentRouter extends Router {
 		}
 
 		return ret;
-	}
-
-	public static class NoDirectoryException extends Exception {
-		private static final long serialVersionUID = 785202694572137886L;
-	}
-
-	public static class NoFileException extends Exception {
-		private static final long serialVersionUID = 785202694572137886L;
 	}
 
 }

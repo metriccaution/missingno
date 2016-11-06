@@ -9,6 +9,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.metriccaution.missingno.content.ContentRouter;
+import com.github.metriccaution.missingno.contexts.Contexts;
+import com.github.metriccaution.missingno.listing.ContentListingRouter;
+
 public class Main {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
@@ -27,7 +31,9 @@ public class Main {
 			LOGGER.info(req.uri());
 		});
 
-		new ContentRouter("/content", contexts);
+		final Contexts ctx = new Contexts(contexts);
+
+		new ContentRouter("/content", ctx);
 		new ContentListingRouter("/listing");
 	}
 

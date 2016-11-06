@@ -1,4 +1,6 @@
-package com.github.metriccaution.missingno;
+package com.github.metriccaution.missingno.listing;
+
+import com.github.metriccaution.missingno.Router;
 
 public class ContentListingRouter extends Router {
 
