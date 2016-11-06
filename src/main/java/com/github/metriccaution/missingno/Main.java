@@ -23,6 +23,7 @@ public class Main {
 	public static void main(final String[] args) {
 		final Map<String, String> contexts = new HashMap<>();
 		// Folders go here
+		contexts.put("A", "B");
 
 		before("*", (req, res) -> {
 			if (!req.host().matches("localhost(:\\d+)?")) {

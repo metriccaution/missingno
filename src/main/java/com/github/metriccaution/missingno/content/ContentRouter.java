@@ -19,8 +19,12 @@ import spark.TemplateEngine;
 
 public class ContentRouter extends Router {
 
+	private Contexts _contexts;
+
 	public ContentRouter(final String base, final Contexts contexts, final TemplateEngine engine) {
 		super(base);
+
+		_contexts = contexts;
 
 		get("/:dir", (req, res) -> {
 			res.redirect("/content/" + req.params("dir") + "/");
@@ -29,9 +33,8 @@ public class ContentRouter extends Router {
 
 		get("/:dir/*", (req, res) -> {
 			final String dir = req.params("dir");
-
 			final String path = req.splat().length == 0 ? "" : req.splat()[0];
-			final Path location = createPath(getPath(contexts, dir), path);
+			final Path location = createPath(dir, path);
 			final Optional<byte[]> result = fileContents(location);
 
 			if (result.isPresent()) {
@@ -41,11 +44,11 @@ public class ContentRouter extends Router {
 
 				return result.get();
 			} else {
-				throw new NoFileException();
+				throw new NoFileException(dir, path);
 			}
 		});
 
-
+		// TODO - Data models
 		exception(NoDirectoryException.class, (ex, req, res) -> {
 			res.status(404);
 			final HashMap<String, String> data = Maps.newHashMap();
@@ -55,20 +58,23 @@ public class ContentRouter extends Router {
 
 		exception(NoFileException.class, (ex, req, res) -> {
 			res.status(404);
-			res.body("No file");
+			final HashMap<String, String> data = Maps.newHashMap();
+			data.put("context", ((NoFileException)ex).getContext());
+			data.put("file", ((NoFileException)ex).getFile());
+			res.body(engine.render(new ModelAndView(data, "no-file")));
 		});
 	}
 
-	public static Path getPath(final Contexts ctx, final String name) {
+	public Path getPath(final String name) {
 		try {
-			return ctx.get(name);
+			return _contexts.get(name);
 		} catch (final IllegalArgumentException e) {
 			throw new NoDirectoryException(name);
 		}
 	}
 
-	public static Path createPath(final Path root, final String path) {
-		final Path constructedPath = root.resolve(path);
+	public Path createPath(final String dir, final String path) {
+		final Path constructedPath = getPath(dir).resolve(path);
 
 		if (Files.isDirectory(constructedPath)) {
 			return constructedPath.resolve("index.html");
