@@ -3,27 +3,24 @@ package com.github.metriccaution.missingno;
 import static spark.Spark.before;
 import static spark.Spark.halt;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.metriccaution.missingno.content.ContentRouter;
-import com.github.metriccaution.missingno.contexts.Contexts;
-import com.github.metriccaution.missingno.listing.ContentListingRouter;
-
-import spark.TemplateEngine;
-import spark.template.jade.JadeTemplateEngine;
+import com.github.metriccaution.missingno.contexts.Context;
+import com.github.metriccaution.missingno.contexts.Context.ContextBuilder;
+import com.github.metriccaution.missingno.files.HttpFileRequester;
 
 public class Main {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
 	public static void main(final String[] args) {
-		final Map<String, String> contexts = new HashMap<>();
-		// Folders go here
-		contexts.put("A", "B");
+
+		final Context ctx = new ContextBuilder()
+				// Folders go here
+				.add("home", "~")
+				.build();
 
 		before("*", (req, res) -> {
 			if (!req.host().matches("localhost(:\\d+)?")) {
@@ -35,12 +32,7 @@ public class Main {
 			LOGGER.info(req.uri());
 		});
 
-		final Contexts ctx = new Contexts(contexts);
-
-		final TemplateEngine engine = new JadeTemplateEngine();
-
-		new ContentRouter("/content", ctx, engine);
-		new ContentListingRouter("/listing");
+		new ContentRouter("/content", new HttpFileRequester(ctx));
 	}
 
 }
