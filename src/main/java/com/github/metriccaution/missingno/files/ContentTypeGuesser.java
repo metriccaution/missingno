@@ -12,11 +12,11 @@ public class ContentTypeGuesser implements HeaderGenerator {
 	private String fileExtension(final Path location) {
 		final String[] extensionParts = location.toString().split(".*\\.");
 
-		if (extensionParts.length > 1) {
-			return extensionParts[extensionParts.length - 1];
-		} else {
+		if (extensionParts.length < 2) {
 			return null;
 		}
+
+		return extensionParts[extensionParts.length - 1];
 	}
 
 	@Override
@@ -41,9 +41,6 @@ public class ContentTypeGuesser implements HeaderGenerator {
 			break;
 		case "json":
 			ret.put(CONTENT_TYPE, "application/json");
-			break;
-		case "xml":
-			ret.put(CONTENT_TYPE, "application/xml");
 			break;
 		case "png":
 			ret.put(CONTENT_TYPE, "image/png");
