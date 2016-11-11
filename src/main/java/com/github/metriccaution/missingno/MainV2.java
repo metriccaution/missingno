@@ -1,6 +1,7 @@
 package com.github.metriccaution.missingno;
 
 import static spark.Spark.get;
+import static spark.Spark.port;
 
 import java.io.InputStream;
 
@@ -28,6 +29,8 @@ public class MainV2 {
 		}
 
 		final Context context = builder.build();
+
+		port(config.getServer().getPort());
 
 		get("/", new ContextListingRoute(context));
 
