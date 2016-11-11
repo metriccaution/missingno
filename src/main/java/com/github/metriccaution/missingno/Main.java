@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import com.github.metriccaution.missingno.content.ContentRouter;
 import com.github.metriccaution.missingno.contexts.Context;
 import com.github.metriccaution.missingno.contexts.Context.ContextBuilder;
+import com.github.metriccaution.missingno.contexts.NoSuchContextException;
 import com.github.metriccaution.missingno.files.HttpFileRequester;
+import com.github.metriccaution.missingno.files.NoSuchFileException;
 
 public class Main {
 
@@ -33,6 +35,8 @@ public class Main {
 		});
 
 		new ContentRouter("/content", new HttpFileRequester(ctx));
+		NoSuchContextException.mapHandler();
+		NoSuchFileException.mapHandler();
 	}
 
 }
