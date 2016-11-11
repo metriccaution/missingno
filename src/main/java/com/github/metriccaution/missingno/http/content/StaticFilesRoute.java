@@ -1,4 +1,4 @@
-package com.github.metriccaution.missingno.http.content.route;
+package com.github.metriccaution.missingno.http.content;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -11,10 +11,6 @@ import com.github.metriccaution.missingno.context.Context;
 import com.github.metriccaution.missingno.context.NoSuchContextException;
 import com.github.metriccaution.missingno.http.Answer;
 import com.github.metriccaution.missingno.http.ResponseMapping;
-import com.github.metriccaution.missingno.http.content.ContentTypeGuesser;
-import com.github.metriccaution.missingno.http.content.fileOps.FileBytes;
-import com.github.metriccaution.missingno.http.content.fileOps.FileExists;
-import com.github.metriccaution.missingno.http.content.fileOps.NoSuchFileException;
 import com.google.common.collect.Maps;
 
 /**

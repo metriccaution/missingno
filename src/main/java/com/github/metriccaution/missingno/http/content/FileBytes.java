@@ -1,4 +1,4 @@
-package com.github.metriccaution.missingno.http.content.fileOps;
+package com.github.metriccaution.missingno.http.content;
 
 import java.io.IOException;
 import java.nio.file.Files;

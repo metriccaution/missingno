@@ -11,9 +11,9 @@ import com.github.metriccaution.missingno.config.ContextEntry;
 import com.github.metriccaution.missingno.config.MissingnoConfig;
 import com.github.metriccaution.missingno.context.Context;
 import com.github.metriccaution.missingno.context.Context.ContextBuilder;
-import com.github.metriccaution.missingno.http.content.fileOps.FileBytes;
-import com.github.metriccaution.missingno.http.content.fileOps.FileExists;
-import com.github.metriccaution.missingno.http.content.route.StaticFilesRoute;
+import com.github.metriccaution.missingno.http.content.FileBytes;
+import com.github.metriccaution.missingno.http.content.FileExists;
+import com.github.metriccaution.missingno.http.content.StaticFilesRoute;
 import com.github.metriccaution.missingno.http.listing.ContextListingRoute;
 
 public class MainV2 {
