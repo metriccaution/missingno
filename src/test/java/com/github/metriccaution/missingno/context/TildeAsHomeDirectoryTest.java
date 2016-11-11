@@ -1,4 +1,4 @@
-package com.github.metriccaution.missingno.contexts;
+package com.github.metriccaution.missingno.context;
 
 import static org.junit.Assert.assertEquals;
 

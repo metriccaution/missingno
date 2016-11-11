@@ -1,4 +1,4 @@
-package com.github.metriccaution.missingno.contexts;
+package com.github.metriccaution.missingno.context;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,10 +10,14 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+/**
+ * Maps a label to a directory
+ */
 public class Context {
 
 	private final Map<String, String> _contexts;
 
+	// TODO - Maybe a mapping to handle file separators, or does the path API handle that?
 	private static final Function<String, String> FILE_NAME_TRANSFORM = new TildeAsHomeDirectory();
 
 	private Context(final Map<String, String> contexts) {

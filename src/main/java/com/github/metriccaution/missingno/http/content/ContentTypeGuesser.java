@@ -1,11 +1,12 @@
-package com.github.metriccaution.missingno.files;
+package com.github.metriccaution.missingno.http.content;
 
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.google.common.collect.Maps;
 
-public class ContentTypeGuesser implements HeaderGenerator {
+public class ContentTypeGuesser implements Function<Path, Map<String, String>> {
 
 	private static final String CONTENT_TYPE = "Content-Type";
 

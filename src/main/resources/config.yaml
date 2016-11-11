@@ -1,0 +1,9 @@
+server:
+    port: 9731
+
+contexts:
+    - label: "home"
+      location: "~"
+    - label: "test"
+      location: "~/workspace"
+
