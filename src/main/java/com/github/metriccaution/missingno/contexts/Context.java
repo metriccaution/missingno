@@ -3,10 +3,12 @@ package com.github.metriccaution.missingno.contexts;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 public class Context {
 
@@ -16,6 +18,10 @@ public class Context {
 
 	private Context(final Map<String, String> contexts) {
 		_contexts = ImmutableMap.copyOf(contexts);
+	}
+
+	public Set<String> listContexts() {
+		return Sets.newHashSet(_contexts.keySet());
 	}
 
 	public Path get(final String context) {
